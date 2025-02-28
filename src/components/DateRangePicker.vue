@@ -65,8 +65,8 @@
             v-if="showRanges"
           >
             <calendar-ranges
-              @clickRange="clickRange"
-              @showCustomRange="showCustomRangeCalendars=true"
+              @click-range="clickRange"
+              @show-custom-range="showCustomRangeCalendars=true"
               :always-show-calendars="alwaysShowCalendars"
               :locale-data="locale"
               :ranges="ranges"
@@ -91,7 +91,7 @@
                           @change-month="changeLeftMonth"
                           :date-format="dateFormatFn"
 
-                          @dateClick="dateClick" @hoverDate="hoverDate"
+                          @date-click="dateClick" @hover-date="hoverDate"
                           :showWeekNumbers="showWeekNumbers"
                 >
                   <slot name="date" slot="date-slot" slot-scope="data" v-bind="data"></slot>
@@ -123,7 +123,7 @@
                           @change-month="changeRightMonth"
                           :date-format="dateFormatFn"
 
-                          @dateClick="dateClick" @hoverDate="hoverDate"
+                          @date-click="dateClick" @hover-date="hoverDate"
                           :showWeekNumbers="showWeekNumbers"
                 >
                   <!--
@@ -565,7 +565,7 @@ export default {
          *
          * @param {Date} date the date clicked
          */
-        this.$emit('finishSelection', value)
+        this.$emit('finish-selection', value)
         this.onSelect();
         if (this.autoApply)
           this.clickedApply();
@@ -579,7 +579,7 @@ export default {
            *
            * @param {Date} date the date clicked
            */
-          this.$emit('startSelection', this.start)
+          this.$emit('start-selection', this.start)
         } else {
           this.onSelect();
           if (this.autoApply)
@@ -593,14 +593,16 @@ export default {
       let dt_end = this.normalizeDatetime(value, this.end);
       let dt_start = this.normalizeDatetime(value, this.start);
       if (this.in_selection) {
-        this.start = new Date(Math.min(this.in_selection.valueOf(), dt_end.valueOf(), dt_start.valueOf()))
-        this.end = new Date(Math.max(this.in_selection.valueOf(), dt_end.valueOf(), dt_start.valueOf()))
+        if (this.in_selection <= dt_end)
+          this.end = dt_end
+        if (this.in_selection >= dt_start)
+          this.start = dt_start
       }
       /**
        * Emits event when the mouse hovers a date
        * @param {Date} value the date that is being hovered
        */
-      this.$emit('hoverDate', value)
+      this.$emit('hover-date', value)
     },
     onClickPicker () {
       if (!this.disabled) {

@@ -41,11 +41,11 @@
     methods: {
       clickRange (range) {
         this.customRangeActive = false
-        this.$emit('clickRange', range)
+        this.$emit('click-range', range)
       },
       clickCustomRange () {
         this.customRangeActive = true
-        this.$emit('showCustomRange')
+        this.$emit('show-custom-range')
       },
       range_class (range) {
         return { active: range.selected === true };

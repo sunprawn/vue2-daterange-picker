@@ -34,8 +34,8 @@
       <td
         v-for="(date, idx) in dateRow"
         :class="dayClass(date)"
-        @click="$emit('dateClick', date)"
-        @mouseover="$emit('hoverDate', date)"
+        @click="$emit('date-click', date)"
+        @mouseover="$emit('hover-date', date)"
         :key="idx"
         :data-date="date.toISOString().substring(0, 10)"
       >
