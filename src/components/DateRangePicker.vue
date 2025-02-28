@@ -449,6 +449,14 @@ export default {
      */
     readonly: {
       type: Boolean
+    },
+    /**
+     * Select mode - 'week' or 'day'
+     * @default 'week'
+     */
+    selectMode: {
+      type: String,
+      default: 'day'
     }
   },
   data () {
@@ -593,10 +601,14 @@ export default {
       let dt_end = this.normalizeDatetime(value, this.end);
       let dt_start = this.normalizeDatetime(value, this.start);
       if (this.in_selection) {
-        if (this.in_selection <= dt_end)
-          this.end = dt_end
-        if (this.in_selection >= dt_start)
-          this.start = dt_start
+        if (this.in_selection <= dt_end) {
+          this.start = this.getDayOfWeek(this.in_selection)
+          this.end = this.getDayOfWeek(dt_end, false)
+        }
+        if (this.in_selection >= dt_start) {
+          this.start = this.getDayOfWeek(dt_start)
+          this.end = this.getDayOfWeek(this.in_selection, false)
+        }
       }
       /**
        * Emits event when the mouse hovers a date
@@ -724,7 +736,25 @@ export default {
       if (this.open && e.keyCode === 27 && this.closeOnEsc) {
         this.clickCancel()
       }
-    }
+    },
+    getDayOfWeek (dateTime, start = true) {
+      if (!this.isWeekMode) {
+        return dateTime;
+      }
+      const firstDay = this.locale.firstDay || 0;
+      const d = new Date(dateTime);
+      const day = d.getDay();
+      const diff = (day - firstDay + 7) % 7;
+      if (start) {
+        // Set to the first day of the week
+        d.setDate(d.getDate() - diff);
+      } else {
+        // Set to the last day of the week
+        d.setDate(d.getDate() - diff + 6);
+      }
+      
+      return d;
+    },
   },
   computed: {
     showRanges () {
@@ -775,6 +805,9 @@ export default {
       let origEnd = new Date(this.dateRange.endDate)
 
       return !this.isClear && (this.start.getTime() !== origStart.getTime() || this.end.getTime() !== origEnd.getTime())
+    },
+    isWeekMode () {
+      return this.selectMode === 'week'
     }
   },
   watch: {
