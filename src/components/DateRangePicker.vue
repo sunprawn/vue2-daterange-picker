@@ -451,12 +451,12 @@ export default {
       type: Boolean
     },
     /**
-     * Select mode - 'week' or 'day'
-     * @default 'week'
+     * Select mode - 'weeks' or 'days'
+     * @default 'days'
      */
     selectMode: {
       type: String,
-      default: 'day'
+      default: 'days'
     }
   },
   data () {
@@ -738,7 +738,7 @@ export default {
       }
     },
     getDayOfWeek (dateTime, start = true) {
-      if (!this.isWeekMode) {
+      if (this.selectMode === 'days') {
         return dateTime;
       }
       const firstDay = this.locale.firstDay || 0;
@@ -806,9 +806,6 @@ export default {
 
       return !this.isClear && (this.start.getTime() !== origStart.getTime() || this.end.getTime() !== origEnd.getTime())
     },
-    isWeekMode () {
-      return this.selectMode === 'week'
-    }
   },
   watch: {
     minDate () {
