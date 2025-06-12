@@ -451,12 +451,12 @@ export default {
       type: Boolean
     },
     /**
-     * Select mode - 'weeks' or 'days'
-     * @default 'days'
+     * Select mode - 'week' or 'day'
+     * @default 'day'
      */
     selectMode: {
       type: String,
-      default: 'days'
+      default: 'day'
     }
   },
   data () {
@@ -738,7 +738,7 @@ export default {
       }
     },
     getDayOfWeek (dateTime, start = true) {
-      if (this.selectMode === 'days') {
+      if (this.selectMode === 'day') {
         return dateTime;
       }
       const firstDay = this.locale.firstDay || 0;

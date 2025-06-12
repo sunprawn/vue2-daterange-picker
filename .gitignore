@@ -14,6 +14,7 @@ selenium-debug.log
 *.njsproj
 *.sln
 .vscode
+.nvmrc
 
 docs/.vuepress/dist
 docs/docs.json
